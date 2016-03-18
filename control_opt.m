@@ -15,6 +15,7 @@ function next_hop = control_opt(router)
         end
     end
 
+    router.next_hop = next_hop;
 end
 
 

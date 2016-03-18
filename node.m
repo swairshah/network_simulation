@@ -5,11 +5,15 @@ classdef node < handle
     properties
         id
         router % next hop router 
+        received_pkt % packet received at the current time stamp
     end
     
     methods
         function obj = connect(obj, router)
             obj.router = router;
+        end
+        function obj = receive(obj, pkt) 
+            obj.received_pkt = pkt;
         end
         function pkt = pkt_generate(obj, dest, send_time)
             pkt = [obj.id; dest.id; send_time];
