@@ -50,8 +50,7 @@ for time = 1:10
         s1.pkt_generate(t1, time);
     end
 
-    control_opt(r0);
-    control_opt(r1);
+    control_opt_combined(r0,r1,r2,r3);
 
     r0.process();
     r1.process();
