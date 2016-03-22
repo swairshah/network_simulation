@@ -51,14 +51,14 @@ for load = loads
     end
 end
     
-time = duration + 1;
-for i = 1:length(r)
-% Run the steps still all the router queues are empty
-    while ~isempty(r{i}.q)
-        sdn_step(controller, r, t, time);
-        time = time + 1;
-    end
-end
+% time = duration + 1;
+% for i = 1:length(r)
+% % Run the steps still all the router queues are empty
+%     while ~isempty(r{i}.q)
+%         sdn_step(controller, r, t, time);
+%         time = time + 1;
+%     end
+% end
 end
 
 

@@ -14,7 +14,7 @@ switch 1
 	otherwise
 		rows = 4;
 end
-cols = ceil((N+1)/rows);
+cols = ceil((N)/rows);
 
 load = loads;
 if size(loads, 2) == 1
@@ -34,12 +34,13 @@ for n = 1:N
 	drops = [drops, drop];
 	delays = [delays, delay];
 
-	if mean(q.cum_reward) > best_mean
+	if mean(nn.cum_reward) > best_mean
 		best_nn = nn;
+        best_mean=mean(nn.cum_reward);
 	end
 
 	subplot(rows, cols, n);
-	plot(q.cum_reward);
+	plot(nn.cum_reward);
 	title(strcat('Candidate-', n));
 	xlabel('Time(i)');
 	ylabel('Reward(points)');
@@ -59,13 +60,13 @@ if size(loads, 2) == 1
 	x_label = 'Time(batch)';
 end
 
-subplot(rows, cols, N+1);
-title('NN-learner');
-xlabel(x_label);
-yyaxis left;
-plot(x_value, drops);
-ylabel('Drop(count)');
-yyaxis right;
-plot(x_value, delays);
-ylabel('Delay(ms)');
+% subplot(rows, cols, N+1);
+% title('NN-learner');
+% xlabel(x_label);
+% yyaxis left;
+% plot(x_value, drops);
+% ylabel('Drop(count)');
+% yyaxis right;
+% plot(x_value, delays);
+% ylabel('Delay(ms)');
 end

@@ -9,12 +9,14 @@ end
 % Run the simulations
 q.learn = 0;
 nn.learn = 0;
+q.cum_reward=[0];
+nn.cum_reward=[0];
 [drop_o, delay_o] = sdn_simulate(duration, load, opt, buffers, seed);
 [drop_q, delay_q] = sdn_simulate(duration, load, q, buffers, seed);
 [drop_n, delay_n] = sdn_simulate(duration, load, nn, buffers, seed);
 
 % Negelect the initial zero reward
-total_duration = size(opt.cum_reward, 2);
+total_duration = size(opt.cum_reward, 2)-1;
 
 figure('name', 'Best Of All');
 subplot(2, 2, 1);
@@ -34,29 +36,21 @@ end
 subplot(2, 2, 2);
 title('Baseline');
 xlabel(x_label);
-yyaxis left;
-plot(x_value, drop_o);
-ylabel('Drop(count)');
-yyaxis right;
-plot(x_value, delay_o);
-ylabel('Delay(ms)');
+h=plotyy(x_value, drop_o, x_value, delay_o);
+ylabel(h(1),'Drop(count)');
+ylabel(h(2),'Delay(ms)');
 
 subplot(2, 2, 3);
 title('Q-learner');
 xlabel(x_label);
-yyaxis left;
-plot(x_value, drop_q);
-ylabel('Drop(count)');
-yyaxis right;
-plot(x_value, delay_q);
-ylabel('Delay(ms)');
+h=plotyy(x_value, drop_q, x_value, delay_q);
+ylabel(h(1),'Drop(count)');
+ylabel(h(2),'Delay(ms)');
 
 subplot(2, 2, 4);
 title('NN-learner');
-yyaxis left;
-plot(x_value, drop_n);
-ylabel('Drop(count)');
-yyaxis right;
-plot(x_value, delay_n);
-ylabel('Delay(ms)');
+xlabel(x_label);
+h=plotyy(x_value, drop_n, x_value, delay_n);
+ylabel(h(1),'Drop(count)');
+ylabel(h(2),'Delay(ms)');
 end

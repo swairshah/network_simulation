@@ -1,4 +1,4 @@
-function best_q = sdn_best_q(duration, N, batch, load, buffers, action_size, epsilon_step)
+function best_q = sdn_best_q(duration, N, batch, loads, buffers, action_size, epsilon_step)
 % Use the same seed for all packet generation
 pkt_seed = randseed;
 % Use the same seed for all random decisions
@@ -14,7 +14,7 @@ switch 1
 	otherwise
 		rows = 4;
 end
-cols = ceil((N+1)/rows);
+cols = ceil((N)/rows);
 
 load = loads;
 if size(loads, 2) == 1
@@ -36,6 +36,7 @@ for n = 1:N
 
 	if mean(q.cum_reward) > best_mean
 		best_q = q;
+        best_mean=mean(q.cum_reward);
 	end
 
 	subplot(rows, cols, n);
@@ -56,13 +57,13 @@ if size(loads, 2) == 1
 	x_label = 'Time(batch)';
 end
 
-subplot(rows, cols, N+1);
-title('Q-learner');
-xlabel(x_label);
-yyaxis left;
-plot(x_value, drops);
-ylabel('Drop(count)');
-yyaxis right;
-plot(x_value, delays);
-ylabel('Delay(ms)');
+% subplot(rows, cols, N+1);
+% title('Q-learner');
+% xlabel(x_label);
+% yyaxis left;
+% plot(x_value, drops);
+% ylabel('Drop(count)');
+% yyaxis right;
+% plot(x_value, delays);
+% ylabel('Delay(ms)');
 end

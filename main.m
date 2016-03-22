@@ -1,7 +1,7 @@
 function main()
-N = 3; % Number of candidates
-B = 2; % Number of batches
-D = 100; % Duration per batch
+N = 5; % Number of candidates
+B = 20; % Number of batches
+D = 1000; % Duration per batch
 buffers = [1, 1, 5, 1, 5, 5]; % Buffer sizes of Routers
 p = 0.75; % Packet generation load
 epsilon_step = 1/D; % Epsilon step size
@@ -16,3 +16,6 @@ best_q = sdn_best_q(D, 1, B, p, buffers, action_size, epsilon_step);
 p = [0.5:0.05:1];
 sdn_compare(D, B, p, buffers, control_opt(), best_q, best_nn);
 end
+
+
+% 5 5 50 100   1 1 
