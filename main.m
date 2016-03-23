@@ -1,6 +1,6 @@
 function main()
 N = 3; % Number of candidates
-B = 1; % Number of batches
+B = 10; % Number of batches
 D = 100; % Duration per batch
 buffers = [1, 1, 2, 1, 5, 5]; % Buffer sizes of Routers
 p = 0.75; % Packet generation load
