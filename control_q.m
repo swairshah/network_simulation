@@ -2,7 +2,7 @@ classdef control_q < handle
     % CONTROL_Q Central contoller class to make NW control decisions using Q-learning
     
     properties
-        Q; % Q table : square matrix of size |states + actions|
+        Q; % Q table : matrix of dimentsions |states + actions|
         state_size;
         action_size;
         prev_state;
@@ -19,7 +19,7 @@ classdef control_q < handle
     
     methods
         function obj = control_q(state_size, action_size, eps_step, seed)
-            obj.Q = zeros([state_size+1, action_size+1]);
+            obj.Q = zeros([state_size+1, action_size]);
             obj.state_size = state_size;
             obj.action_size = action_size;
             obj.prev_state = ones(1, length(state_size));
@@ -42,15 +42,18 @@ classdef control_q < handle
             
             % Compute the Q update using the previous reward
             if obj.learn == 1
-                greedy_Q = max(max(obj.Q(cur_state(1), cur_state(2), cur_state(3), cur_state(4), :, :)));
-                update = (1-obj.alpha) * obj.Q([obj.prev_state, obj.prev_action]) + obj.alpha * (reward + obj.gamma*greedy_Q);
-                obj.Q([obj.prev_state, obj.prev_action]) = update;
+                cur_index=num2cell(cur_state);
+                prev_index=num2cell([obj.prev_state, obj.prev_action]);
+                greedy_Q = max(max(obj.Q(cur_index{:}, :, :)));
+                update = (1-obj.alpha) * obj.Q(prev_index{:}) + obj.alpha * (reward + obj.gamma*greedy_Q);
+                obj.Q(prev_index{:}) = update;
             end
             
             % Choose a new action
             if rand(obj.r_stream) > obj.epsilon
                 % Greedy step
-                current_Q = obj.Q(cur_state(1), cur_state(2), cur_state(3), cur_state(4), :, :);
+                cur_index=num2cell(cur_state);
+                current_Q = obj.Q(cur_index{:}, :, :);
                 [~, greedy_ij] = max(current_Q(:));
                 [control1, control2] = ind2sub(obj.action_size, greedy_ij);
             else

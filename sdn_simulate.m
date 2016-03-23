@@ -7,13 +7,14 @@ avg_delays = [];
 
 % Use the same stream for all packet generation
 node.rand_stream(RandStream('mt19937ar', 'Seed', seed));
+time = 1;
 for load = loads
     % Set the packet generation loads
     for i = 1:length(s)
         s{i}.load = load;
     end
     
-    for time = 1:duration
+    for time_loop = 1:duration
         % Generate packets at the sources
         for i = 1:length(s)
             s{i}.generate_pkt(time);
@@ -24,8 +25,10 @@ for load = loads
         
         % Process a single step of packet forwarding at every router
         sdn_step(controller, r, t, time);
+        
+        time=time+1;
     end
-
+    
     % Calculate cumulative drop for this load
     cum_drop = 0;
     for i = 1:length(r)
@@ -41,7 +44,7 @@ for load = loads
     end
     avg_delay = cum_delay / pkt_count;
     avg_delays = [avg_delays, avg_delay];
-
+    
     % Clear the drops & delays at nodes & routers for next load. The buffers queues are maintained though.
     for i = 1:length(r)
         r{i}.clear();
@@ -50,15 +53,6 @@ for load = loads
         t{i}.clear();
     end
 end
-    
-% time = duration + 1;
-% for i = 1:length(r)
-% % Run the steps still all the router queues are empty
-%     while ~isempty(r{i}.q)
-%         sdn_step(controller, r, t, time);
-%         time = time + 1;
-%     end
-% end
 end
 
 

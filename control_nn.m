@@ -24,16 +24,16 @@ classdef control_nn < handle
         function obj = control_nn(hiddenLayerSize, state_size, action_size, eps_step, seed, replay_size, sample_size)
             % Create a Curve Fitting Network with a single hidden layer of size 10 by
             % default. The Neural NW is used in place of the Q(s,a) function
-            net = fitnet(hiddenLayerSize);
-            net.inputs{1}.size = length(state_size);
-            net.layers{size(hiddenLayerSize,2)+1}.size = prod(action_size); % Output layer size
+            nn = fitnet(hiddenLayerSize);
+            nn.inputs{1}.size = length(state_size);
+            nn.layers{size(hiddenLayerSize,2)+1}.size = prod(action_size); % Output layer size
             %net.layers{3}.transferFcn = 'logsig';
             %net.adaptParam.passes = duration;
-            net = setwb(net, ones(1, 100));
-            net = init(net);
-            net.trainParam.showWindow=0;
-            net.performParam.regularization = 0.5;
-            obj.net = net;
+            nn = setwb(nn, ones(1, 100));
+            nn = init(nn);
+            nn.trainParam.showWindow=0;
+            nn.performParam.regularization = 0.5;
+            obj.net = nn;
 
             obj.state_size = state_size;
             obj.action_size = action_size;
@@ -65,22 +65,22 @@ classdef control_nn < handle
                     rR = rR + 1;
                 else
                     % When the Replay set gets too big forget the oldest sample
-                    obj.R(1:rR-1) = obj.R(2:rR);
+                    obj.R(1, :) = [];
                 end
                 obj.R(rR, :) = [obj.prev_state, obj.prev_action, rew];
                 
                 % Sample some elements of the replay set for learning
-                sample_size = min(obj.sample_size, rR);
-                target = zeros(4, sample_size);
-                if sample_size == rR
+                cur_sample_size = min(obj.sample_size, rR);
+                target = zeros(4, cur_sample_size);
+                if cur_sample_size == rR
                     % Not enough samples so use all in Replay set
                     samples = 1:rR;
                 else
                     % Generate random sample indices
-                    samples = randi(rR, 1, sample_size);
+                    samples = randi(rR, 1, cur_sample_size);
                 end
                 
-                for i = 1:sample_size
+                for i = 1:cur_sample_size
                     j = samples(i);
                     % Calculate the Greedy Q for the next state of jth state
                     sample_state = obj.R(j, 1:4)';
@@ -92,10 +92,10 @@ classdef control_nn < handle
                         next_state = obj.R(j+1, 1:4)';
                     end
                     Q = reshape(obj.net(sample_state), obj.action_size)';
-                    next_Q = reshape(obj.net(next_state), obj.action_size)';
-                    updated_reward = (1-obj.alpha) * Q(sample_action+1) + obj.alpha * ( sample_rew + obj.gamma * next_Q(sample_action+1) );
+                    greedy_next_Q = max(obj.net(next_state));
+                    updated_reward = (1-obj.alpha) * Q(sample_action) + obj.alpha * (sample_rew + obj.gamma * greedy_next_Q);
                     expect = NaN .* ones(obj.action_size);
-                    expect(sample_action+1) = updated_reward;
+                    expect(sample_action) = updated_reward;
                     target(:, i) = expect(:);
                 end
                 
@@ -106,8 +106,8 @@ classdef control_nn < handle
             % Choose a new action
             if rand(obj.r_stream) > obj.epsilon
                 % Greedy step
-                [~, greedy_i] = max(obj.net(cur_state'));
-                [control1, control2] = ind2sub(obj.action_size, greedy_i);
+                [~, greedy_ij] = max(obj.net(cur_state'));
+                [control1, control2] = ind2sub(obj.action_size, greedy_ij);
             else
                 % Random step
                 control1 = randi(obj.action_size(1));
