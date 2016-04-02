@@ -42,11 +42,7 @@ for n = 1:N
     xlabel('Time');
     ylabel('Reward');
     if n == 1
-        title_layers = strcat(', n-', num2str(hiddenLayerSize));
-        title_epsilon = strcat(', e-1/', num2str(1/epsilon_step));
-        title_replay = strcat(', r-', num2str(replay_size));
-        title_sample = strcat(', s-', num2str(sample_size));
-        title(strcat('Same packets', title_layers, title_epsilon, title_replay, title_sample));
+        title(sprintf('Same packets, n-[%s], e-1/%d, r-%d, s-%d', sprintf('%d,', hiddenLayerSize), 1/epsilon_step, replay_size, sample_size));
     end
 end
 

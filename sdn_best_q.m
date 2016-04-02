@@ -42,8 +42,7 @@ for n = 1:N
     xlabel('Time');
     ylabel('Reward');
     if n == 1
-        title_epsilon = strcat(', Epsilon-1/', num2str(1/epsilon_step));
-        title(strcat('Same packets', title_epsilon));
+        title(sprintf('Same packets, epsilon-1/%d', 1/epsilon_step));
     end
 end
 
