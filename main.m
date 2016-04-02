@@ -12,7 +12,7 @@ hiddenLayerSize = [4, 4];
 action_size = [2, 2];
 best_q = sdn_best_q(D, 1, B, p, buffers, action_size, epsilon_step);
 best_nn = sdn_best_nn(D, N, B, p, hiddenLayerSize, buffers, action_size, epsilon_step, replay_size, sample_size);
-save(sprintf('[%s], %d-%d', sprintf('%d,', buffers), sample_size, replay_size), 'best_q');
+save(sprintf('[%s]', sprintf('%d,', buffers)), 'best_q');
 save(sprintf('[%s], [%s], %d-%d', sprintf('%d,', buffers), sprintf('%d,', hiddenLayerSize), sample_size, replay_size), 'best_nn');
 
 p = [0.5, 0.9, 0.75, 1, 0.6];

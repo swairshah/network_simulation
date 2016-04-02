@@ -79,5 +79,5 @@ axis(h(2), [0, length(batches), 0, max_delay]);
 h(1).XTick = 0:batch_count:length(batches);
 h(1).XTickLabel = [loads, 0];
 
-savefig(sprintf('[%s], [%s].fig', sprintf('%d,', buffers), sprintf('%f,', loads)));
+savefig(sprintf('[%s], [%s].fig', sprintf('%d,', buffers), sprintf('%.2f,', loads)));
 end

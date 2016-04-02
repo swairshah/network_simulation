@@ -46,5 +46,5 @@ for n = 1:N
     end
 end
 
-savefig(sprintf('[%s], %d-%d.fig', sprintf('%d,', buffers), sample_size, replay_size));
+savefig(sprintf('[%s].fig', sprintf('%d,', buffers)));
 end
