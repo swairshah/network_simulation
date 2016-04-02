@@ -46,5 +46,5 @@ for n = 1:N
     end
 end
 
-print('NN Candidates','-dpng');
+savefig(sprintf('[%s], [%s], %d-%d.fig', sprintf('%d,', buffers), sprintf('%d,', hiddenLayerSize), sample_size, replay_size));
 end

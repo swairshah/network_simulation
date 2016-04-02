@@ -46,5 +46,5 @@ for n = 1:N
     end
 end
 
-print('Q Candidates','-dpng');
+savefig(sprintf('[%s], %d-%d.fig', sprintf('%d,', buffers), sample_size, replay_size));
 end

@@ -1,8 +1,8 @@
 function main()
 N = 3; % Number of candidates
-B = 1; % Number of batches
+B = 10; % Number of batches
 D = 1000; % Duration per batch
-buffers = [1, 1, 2, 1, 5, 5]; % Buffer sizes of Routers
+buffers = [1, 1, 2, 1, 1, 1]; % Buffer sizes of Routers
 p = 0.75; % Packet generation load
 epsilon_step = 1/D; % Epsilon step size
 replay_size = 1000; % Size of the replay set
